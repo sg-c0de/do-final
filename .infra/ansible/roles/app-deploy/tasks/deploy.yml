@@ -1,0 +1,47 @@
+- name: Create version dir
+  file:
+    path: "{{ app_version_dir }}/{{ app_version }}"
+    state: directory
+    mode: 0755
+  remote_user: "{{ deploy_user }}"
+
+- name: Copy bin to version dir
+  copy:
+    dest: "{{ app_version_dir }}/{{ app_version }}"
+    src: "{{ app_build_dir }}/{{ app_name }}"
+    remote_src: yes
+    mode: 0755
+  remote_user: "{{ deploy_user }}"
+
+- name: Create symlink
+  file:
+    path: "{{ app_deploy_dir }}/{{ app_name }}"
+    src: "{{ app_version_dir }}/{{ app_version }}/{{ app_name }}"
+    state: link
+    mode: 0755
+  remote_user: "{{ deploy_user }}"
+
+- name: Database migration
+  shell: "{{ app_deploy_dir }}/{{ app_name }} migrate --config {{ app_conf_dir }}/app.ini"
+  environment:
+    GITEA_WORK_DIR: "{{ app_work_dir }}"
+  remote_user: "{{ app_user }}"
+  when: db_created.changed
+
+
+
+### Cleanup
+
+#- name: Delete build dir
+#  ansible.builtin.file:
+#    path: "{{ app_build_dir }}"
+#    state: absent
+#  become: yes
+
+#- name: Create build dir
+#  ansible.builtin.file:
+#    path: "{{ app_build_dir }}"
+#    state: directory
+#    mode: 0755
+#  loop: "{{ deploy_dirs }}"
+#  become: yes

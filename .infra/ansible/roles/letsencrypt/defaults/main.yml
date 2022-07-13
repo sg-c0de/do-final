@@ -1,0 +1,5 @@
+active_sites_path: /etc/nginx/sites-enabled
+available_sites_path: /etc/nginx/sites-available
+host_filename:
+  - http-redirect
+  - https

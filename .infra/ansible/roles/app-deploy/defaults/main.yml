@@ -1,0 +1,28 @@
+app_packages:
+  - git
+  - make
+  - gcc
+app_user: app
+deploy_user: cicd
+postgresql_gitea_user: gitea
+postgresql_gitea_db: giteadb
+app_repo: "https://{{ gituser | urlencode }}:{{ gitpassword | urlencode }}@gitlab.rebrainme.com/devops_users_repos/2735/do-final.git"
+gituser: sg_soap_at_gmail_com
+gitpassword: []
+app_name: gitea
+app_version: v.0.1
+app_service_name: gitea.service
+app_conf_dir: "/etc/{{ app_name }}"
+app_log_dir: "/var/log/{{ app_name }}"
+app_work_dir: "/var/lib/{{ app_name }}"
+app_deploy_dir: "/opt/{{ app_name }}"
+app_version_dir: "/opt/{{ app_name }}/versions"
+app_build_dir: "/usr/local/src/{{ app_name }}"
+app_dirs:
+  - "{{ app_conf_dir }}"
+  - "{{ app_log_dir }}"
+  - "{{ app_work_dir }}"
+deploy_dirs:
+  - "{{ app_deploy_dir }}"
+  - "{{ app_version_dir }}"
+  - "{{ app_build_dir }}"

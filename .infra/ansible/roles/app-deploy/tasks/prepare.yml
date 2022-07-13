@@ -1,0 +1,40 @@
+---
+- name: Install prerequisites
+  apt:
+    allow_unauthenticated: yes
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  loop: "{{ app_packages }}"
+
+- name: Create application dirs
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
+  loop: "{{ app_dirs }}"
+
+- name: Create deploy working dir
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+    owner: "{{ deploy_user }}"
+    group: "{{ deploy_user }}"
+  loop: "{{ deploy_dirs }}"
+
+- name: Add a setting to ~/.gitconfig
+  community.general.git_config:
+    name: safe.directory
+    scope: global
+    value: "{{ app_build_dir }}"
+
+- name: Create config file
+  template:
+    src: app.ini.j2
+    dest: "{{ app_conf_dir }}/app.ini"
+    mode: 0755
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"

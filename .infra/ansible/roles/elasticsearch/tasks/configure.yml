@@ -1,0 +1,19 @@
+---
+- name: Deploy elastic config files
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/elasticsearch/{{ item }}"
+    owner: root
+    group: elasticsearch
+    mode: 0640
+  loop:
+    - elasticsearch.yml
+    - jvm.options
+  notify: restart elasticsearch
+
+- name: Set ES service timeout
+  lineinfile:
+    path: /usr/lib/systemd/system/elasticsearch.service
+    regexp: '^TimeoutStartSec='
+    line: TimeoutStartSec=300
+  notify: restart elasticsearch

@@ -1,0 +1,58 @@
+---
+- name: Copy rsyslog config
+  copy:
+    src: 22-fluentd.conf
+    dest: /etc/rsyslog.d/22-fluentd.conf
+  notify: restart rsyslogd
+
+- name: Create service file
+  template:
+    src: td-agent.service.j2
+    dest: /lib/systemd/system/td-agent.service
+  notify: restart fluentd
+
+- name: Configure Fluentd
+  template:
+    src: td-agent.conf.j2
+    dest: /etc/td-agent/td-agent.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart fluentd
+
+#- name: Remove elastic 8 plugins
+#  gem:
+#    name: "{{ item }}"
+#    executable: /opt/td-agent/bin/fluent-gem
+#    state: absent
+#    user_install: false
+#  loop:
+#    - "elastic_ruby_console"
+#    - "elasticsearch-api"
+#    - "elasticsearch"
+
+#- name: Install elastic 7 plugins
+#  gem:
+#    name: "{{ item }}"
+#    executable: /opt/td-agent/bin/fluent-gem
+#    version: 7.1.17
+#    state: present
+#    user_install: false
+#  loop:
+#    - "elasticsearch-api"
+#    - "elasticsearch"
+#  notify: restart fluentd
+
+- name: Install Fluentd plugins
+  gem:
+    name: "{{ item }}"
+    executable: /opt/td-agent/usr/sbin/td-agent-gem
+    state: present
+    user_install: false
+  loop: "{{ fluentd_plugins }}"
+
+- name: Start Fluentd
+  service:
+    name: td-agent
+    state: started
+    enabled: yes

@@ -1,0 +1,6 @@
+---
+es_ip_address: "{{ ansible_facts['eth0']['ipv4']['address'] }}"
+es_port: 9200
+
+jvm_Xms: 512m
+jvm_Xmx: 512m

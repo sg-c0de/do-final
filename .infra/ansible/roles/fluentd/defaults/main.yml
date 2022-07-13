@@ -1,0 +1,5 @@
+---
+fluentd_plugins:
+  - fluent-plugin-elasticsearch
+
+td_agent_user: root

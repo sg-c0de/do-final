@@ -1,0 +1,7 @@
+active_sites_path: /etc/nginx/sites-enabled
+available_sites_path: /etc/nginx/sites-available
+host_filename: https
+
+app_name: gitea
+app_port: 3000
+upstream_target: localhost

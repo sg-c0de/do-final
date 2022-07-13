@@ -1,0 +1,69 @@
+---
+
+- hosts: all
+  roles:
+    - role: admin-users
+      become: yes
+    - role: node-exporter
+      become: yes
+    - role: fluentd
+      become: yes
+#    - role: iptables
+#      become: yes
+  remote_user: ubuntu
+  vars_files:
+    - vaults/vault.yml
+- hosts: app
+  roles:
+    - role: deploy-users
+      become: yes
+    - role: go
+      become: yes
+    - role: nodejs
+      become: yes
+    - role: nginx
+      become: yes
+    - role: letsencrypt
+      become: yes
+    - role: psql
+      become: yes
+    - role: app-deploy
+    - role: nginx-upstream
+      become: yes
+      vars:
+        host_filename: http
+    - role: gitlab-runner
+      become: yes
+  remote_user: ubuntu
+  vars_files:
+    - vaults/vault.yml
+- hosts: log
+  roles:
+    - role: elasticsearch
+      become: yes
+  remote_user: ubuntu
+  vars_files:
+    - vaults/vault.yml
+- hosts: prom
+  roles:
+    - role: prometheus
+      become: yes
+    - role: nginx
+      become: yes
+    - role: common-letsencrypt
+      become: yes
+    - role: nginxlog-exporter
+      become: yes
+    - role: grafana
+      become: yes
+      vars:
+        grafana_protocol: http
+    - role: nginx-upstream
+      become: yes
+      vars:
+        app_name: grafana
+        app_port: 3000
+        host_filename: http
+  remote_user: ubuntu
+  vars_files:
+    - vaults/vault.yml

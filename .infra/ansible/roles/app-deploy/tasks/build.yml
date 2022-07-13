@@ -1,0 +1,20 @@
+---
+- name: Git checkout
+  ansible.builtin.git:
+    repo: "{{ app_repo }}"
+    dest: "{{ app_build_dir }}"
+    clone: yes
+  remote_user: "{{ deploy_user }}"
+
+- name: Build 'all' target with extra arguments
+  make:
+    chdir: "{{ app_build_dir }}"
+    target: build
+    params:
+      TAGS: bindata
+  remote_user: "{{ deploy_user }}"
+  environment:
+    GOPATH: "/home/{{ deploy_user }}/go"
+    NPM_CONFIG_PREFIX: /usr/local/lib/npm
+    NODE_PATH: $NODE_PATH:/usr/local/lib/npm/lib/node_modules
+    PATH: $GOPATH/bin:/usr/local/go/bin:/usr/local/lib/npm/bin:{{ ansible_env.PATH }}

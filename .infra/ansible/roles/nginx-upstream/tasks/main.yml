@@ -1,0 +1,20 @@
+---
+
+- name: Install config files
+  template:
+    src: '{{ host_filename }}.j2'
+    dest: '{{ available_sites_path }}/{{ host_filename }}.conf'
+    owner: root
+    mode: 0644
+    force: yes
+  notify: reload nginx
+
+- name: Create virtual hosts symlink
+  file:
+    src: '{{ available_sites_path }}/{{ host_filename }}.conf'
+    dest: '{{ active_sites_path }}/{{ host_filename }}.conf'
+    state: link
+  notify: reload nginx
+
+- name: Check nginx config
+  shell: /usr/sbin/nginx -t
