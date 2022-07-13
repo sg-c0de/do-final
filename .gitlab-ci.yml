@@ -1,0 +1,53 @@
+variables:
+  REPO_NAME: gitlab.rebrainme.com/devops_users_repos/2735/do-final
+  PACKAGE: gitea
+  VERSION: $PACKAGE_VERSION-$CI_COMMIT_SHORT_SHA
+
+before_script:
+  - mkdir -p $GOPATH/src/$(dirname $REPO_NAME)
+  - ln -svf $CI_PROJECT_DIR $GOPATH/src/$REPO_NAME
+  - cd $GOPATH/src/$REPO_NAME
+
+stages:
+  - linting
+  - build
+  - deploy
+
+go-lint:
+  tags:
+    - deploy
+  stage: linting
+  script:
+    - go mod init  
+    - go install golint
+    - golint ./...
+  only:
+      refs:
+       - master
+  
+
+compile:
+  tags:
+    - deploy
+  stage: build
+  script:
+    - TAGS="bindata" make build
+  artifacts:
+    paths:
+      - $CI_PROJECT_DIR/$PACKAGE
+  only:
+      refs:
+       - master
+
+
+deployapp:
+  tags:
+    - deploy
+  stage: deploy
+  script:
+    - mkdir -p /opt/gitea/versions/$VERSION
+    - cp $CI_PROJECT_DIR/$PACKAGE /opt/gitea/versions/$VERSION
+    - ln -s /opt/gitea/versions/$VERSION /opt/gitea/$PACKAGE 
+  only:
+      refs:
+       - master
