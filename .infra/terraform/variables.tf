@@ -99,7 +99,7 @@ variable "prom_vps_memory" {
 variable "prom_vps_disk_size" {
   description = "Disk size of app instances."
   type        = number
-  default     = 3
+  default     = 6
 }
 
 variable "yc_service_accout_key" {
