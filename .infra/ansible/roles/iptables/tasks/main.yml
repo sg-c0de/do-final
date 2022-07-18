@@ -10,6 +10,13 @@
       - "22"
     jump: ACCEPT
 
+- name: Allow local dns resolution
+  ansible.builtin.iptables:
+    chain: INPUT
+    protocol: udp
+    destination_ports: 53
+    jump: ACCEPT
+
 - name: Allow trusted IP
   ansible.builtin.iptables:
     chain: INPUT

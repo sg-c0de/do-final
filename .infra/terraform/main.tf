@@ -20,7 +20,7 @@ resource "local_file" "ans_inv" {
   filename = "${path.module}/../inventory/dev"
 }
 
-
+/*
 resource "null_resource" "AnsiblePlaybook" {
   provisioner "local-exec" {
     command = "ansible-playbook -i '${path.module}/../inventory/dev' '${path.module}/../ansible/do-final.yml' --vault-password-file ~/.keys/vault_password"
@@ -29,3 +29,4 @@ resource "null_resource" "AnsiblePlaybook" {
     local_file.ans_inv
   ]
 }
+*/

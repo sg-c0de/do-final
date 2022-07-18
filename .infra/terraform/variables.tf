@@ -55,7 +55,7 @@ variable "app_vps_disk_size" {
 variable "log_vps_count" {
   description = "Number of app instances to provision."
   type        = number
-  default     = 1
+  default     = 0
 }
 
 variable "log_vps_cores" {
@@ -81,7 +81,7 @@ variable "log_vps_disk_size" {
 variable "prom_vps_count" {
   description = "Number of app instances to provision."
   type        = number
-  default     = 1
+  default     = 0
 }
 
 variable "prom_vps_cores" {

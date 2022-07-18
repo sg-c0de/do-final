@@ -10,10 +10,3 @@
     - elasticsearch.yml
     - jvm.options
   notify: restart elasticsearch
-
-- name: Set ES service timeout
-  lineinfile:
-    path: /usr/lib/systemd/system/elasticsearch.service
-    regexp: '^TimeoutStartSec='
-    line: TimeoutStartSec=300
-  notify: restart elasticsearch

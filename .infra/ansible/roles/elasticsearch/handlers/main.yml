@@ -1,8 +1,15 @@
 ---
-- name: restart elasticsearch
+- name: start elasticsearch
   become: true
   service:
     daemon_reload: true
+    name: elasticsearch
+    state: started
+    enabled: yes
+
+- name: restart elasticsearch
+  become: true
+  service:
     name: elasticsearch
     state: restarted
     enabled: yes

@@ -1,4 +1,4 @@
-- name: reload nginx
+- name: reload nginx (le)
   service:
     name: nginx
     state: reloaded

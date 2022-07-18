@@ -11,15 +11,15 @@ data "yandex_vpc_subnet" "default-ru-central1-a" {
 
 
 resource "yandex_compute_instance" "app" {
-  count       = "${var.app_vps_count}"
+  count       = var.app_vps_count
   name        = "${var.prefix}-app-${count.index + 1}"
   platform_id = "standard-v1"
   zone        = "ru-central1-a"
   allow_stopping_for_update = true
 
   resources {
-    cores  = "${var.app_vps_cores}"
-    memory = "${var.app_vps_memory}"
+    cores  = var.app_vps_cores
+    memory = var.app_vps_memory
     core_fraction = 5
   }
 
@@ -29,12 +29,12 @@ resource "yandex_compute_instance" "app" {
       #image_id = "fd8ba0ukgkn46r0qr1gi"
       #ubuntu 18.04
       image_id = "fd8fd8quajkpbnh4g782"
-      size = "${var.app_vps_disk_size}"
+      size = var.app_vps_disk_size
     }
   }
 
   network_interface {
-    subnet_id = "${data.yandex_vpc_subnet.default-ru-central1-a.id}"
+    subnet_id = data.yandex_vpc_subnet.default-ru-central1-a.id
     nat = true
   }
 
@@ -50,15 +50,15 @@ resource "yandex_compute_instance" "app" {
 }
 
 resource "yandex_compute_instance" "log" {
-  count       = "${var.log_vps_count}"
+  count       = var.log_vps_count
   name        = "${var.prefix}-log-${count.index + 1}"
   platform_id = "standard-v1"
   zone        = "ru-central1-a"
   allow_stopping_for_update = true
 
   resources {
-    cores  = "${var.log_vps_cores}"
-    memory = "${var.log_vps_memory}"
+    cores  = var.log_vps_cores
+    memory = var.log_vps_memory
     core_fraction = 5
   }
 
@@ -68,12 +68,12 @@ resource "yandex_compute_instance" "log" {
       #image_id = "fd8ba0ukgkn46r0qr1gi"
       #ubuntu 18.04
       image_id = "fd8fd8quajkpbnh4g782"
-      size = "${var.log_vps_disk_size}"
+      size = var.log_vps_disk_size
     }
   }
 
   network_interface {
-    subnet_id = "${data.yandex_vpc_subnet.default-ru-central1-a.id}"
+    subnet_id = data.yandex_vpc_subnet.default-ru-central1-a.id
     nat = true
   }
 
@@ -89,15 +89,15 @@ resource "yandex_compute_instance" "log" {
 }
 
 resource "yandex_compute_instance" "prom" {
-  count       = "${var.prom_vps_count}"
+  count       = var.prom_vps_count
   name        = "${var.prefix}-prom-${count.index + 1}"
   platform_id = "standard-v1"
   zone        = "ru-central1-a"
   allow_stopping_for_update = true
 
   resources {
-    cores  = "${var.prom_vps_cores}"
-    memory = "${var.prom_vps_memory}"
+    cores  = var.prom_vps_cores
+    memory = var.prom_vps_memory
     core_fraction = 5
   }
 
@@ -107,12 +107,12 @@ resource "yandex_compute_instance" "prom" {
       #image_id = "fd8ba0ukgkn46r0qr1gi"
       #ubuntu 18.04
       image_id = "fd8fd8quajkpbnh4g782"
-      size = "${var.prom_vps_disk_size}"
+      size = var.prom_vps_disk_size
     }
   }
 
   network_interface {
-    subnet_id = "${data.yandex_vpc_subnet.default-ru-central1-a.id}"
+    subnet_id = data.yandex_vpc_subnet.default-ru-central1-a.id
     nat = true
   }
 

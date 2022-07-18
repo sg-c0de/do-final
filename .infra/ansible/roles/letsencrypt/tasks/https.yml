@@ -19,7 +19,7 @@
   file:
     path: '{{ active_sites_path }}/http.conf'
     state: absent
-  notify: reload nginx
+  notify: reload nginx (le)
 
 - name: Install https and http redirector config
   template:
@@ -28,7 +28,7 @@
     owner: root
     mode: 0644
   loop: "{{ host_filename }}"
-  notify: reload nginx
+  notify: reload nginx (le)
 
 - name: Force reload
   meta: flush_handlers
@@ -39,7 +39,7 @@
     dest: '{{ active_sites_path }}/{{ item }}.conf'
     state: link
   loop: "{{ host_filename }}"
-  notify: reload nginx
+  notify: reload nginx (le)
 
 - name: Create cron task for certificate renewal
   cron:

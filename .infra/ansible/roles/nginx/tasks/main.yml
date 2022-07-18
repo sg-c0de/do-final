@@ -5,6 +5,7 @@
     allow_unauthenticated: yes
     name: nginx
     state: present
+    update_cache: yes
   notify: start nginx
 
 - name: Remove default site config
@@ -24,6 +25,6 @@
 - name: Check nginx config
   command: /usr/sbin/nginx -t
   changed_when: False
-  
+
 - name: Force reload
   meta: flush_handlers

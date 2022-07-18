@@ -1,3 +1,7 @@
+- name: Pause for 2 minutes to grafana startup
+  ansible.builtin.pause:
+    minutes: 2
+
 - name: create prometheus datasource
   community.grafana.grafana_datasource:
     name: prometheus

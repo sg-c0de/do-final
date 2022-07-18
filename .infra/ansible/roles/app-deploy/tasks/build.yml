@@ -6,6 +6,24 @@
     clone: yes
   remote_user: "{{ deploy_user }}"
 
+- name: Install npm packages
+  community.general.npm:
+    path: "{{ app_build_dir }}"
+  remote_user: "{{ deploy_user }}"
+  environment:
+    NPM_CONFIG_PREFIX: /usr/local/lib/npm
+    NODE_PATH: $NODE_PATH:/usr/local/lib/npm/lib/node_modules
+    PATH: /usr/local/lib/npm/bin:{{ ansible_env.PATH }}
+
+- name: Install go packages
+  shell:
+    cmd: "go install"
+    chdir: "{{ app_build_dir }}"
+  remote_user: "{{ deploy_user }}"
+  environment:
+    GOPATH: "/home/{{ deploy_user }}/go"
+    PATH: $GOPATH/bin:/usr/local/go/bin:{{ ansible_env.PATH }}
+
 - name: Build 'all' target with extra arguments
   make:
     chdir: "{{ app_build_dir }}"

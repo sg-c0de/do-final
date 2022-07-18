@@ -6,14 +6,14 @@
     dest: '{{ available_sites_path }}/http.conf'
     owner: root
     mode: 0644
-  notify: reload nginx
+  notify: reload nginx (le)
 
 - name: Create virtual hosts symlink
   file:
     src: '{{ available_sites_path }}/http.conf'
     dest: '{{ active_sites_path }}/http.conf'
     state: link
-  notify: reload nginx
+  notify: reload nginx (le)
 
 - name: Check nginx config
   shell: /usr/sbin/nginx -t
