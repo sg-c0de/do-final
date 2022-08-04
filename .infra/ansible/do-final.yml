@@ -6,10 +6,21 @@
     - role: admin-users
     - role: node-exporter
     - role: fluentd
-    - role: iptables
+#    - role: iptables
   remote_user: ubuntu
   vars_files:
     - vaults/vault.yml
+
+- hosts: lb
+  become: yes
+  remote_user: ubuntu
+  roles:
+    - role: nginx
+    - role: letsencrypt
+    - role: nginxlog-exporter
+    - role: nginx-lb
+      vars:
+        host_filename: https
 
 - hosts: app
   become: yes
@@ -20,15 +31,9 @@
     - role: deploy-users
     - role: go
     - role: nodejs
-    - role: nginx
-    - role: letsencrypt
-    - role: nginxlog-exporter
     - role: psql
     - role: app-deploy
       become: no
-    - role: nginx-upstream
-#      vars:
-#        host_filename: http
     - role: gitlab-runner
 
 - hosts: log
@@ -46,14 +51,6 @@
     - vaults/vault.yml
   roles:
     - role: prometheus
-    - role: nginx
-    - role: letsencrypt
-    - role: nginxlog-exporter
-    - role: nginx-upstream
-      vars:
-        app_name: grafana
-        app_port: 3000
-#        host_filename: http
     - role: grafana
-#      vars:
-#        grafana_protocol: http
+      vars:
+        grafana_protocol: http

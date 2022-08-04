@@ -21,7 +21,10 @@ ROOT = {{ app_conf_dir }}/data/gitea-repositories
 SSH_DOMAIN       = localhost
 DOMAIN           = localhost
 HTTP_PORT        = 3000
-ROOT_URL         = https://{{ inventory_hostname }}/
+{% for host in groups['lb'] -%}
+ROOT_URL         = https://{{ hostvars[host]['inventory_hostname'] }}/
+{%- endfor %}
+
 DISABLE_SSH      = false
 SSH_PORT         = 22
 LFS_START_SERVER = true

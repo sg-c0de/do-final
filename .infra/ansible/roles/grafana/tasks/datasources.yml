@@ -5,7 +5,7 @@
 - name: create prometheus datasource
   community.grafana.grafana_datasource:
     name: prometheus
-    grafana_url: "{{ grafana_protocol }}://{{ inventory_hostname }}"
+    grafana_url: "{{ grafana_protocol }}://{{ ansible_facts['eth0']['ipv4']['address'] }}:{{ grafana_port }}"
     grafana_user: "admin"
     grafana_password: "{{ grafana_admin_password }}"
     ds_type: prometheus
@@ -15,7 +15,7 @@
 - name: Create elasticsearch datasource
   community.grafana.grafana_datasource:
     name: "datasource-elastic"
-    grafana_url: "{{ grafana_protocol }}://{{ inventory_hostname }}"
+    grafana_url: "{{ grafana_protocol }}://{{ ansible_facts['eth0']['ipv4']['address'] }}:{{ grafana_port }}"
     grafana_user: "admin"
     grafana_password: "{{ grafana_admin_password }}"
     org_id: "1"

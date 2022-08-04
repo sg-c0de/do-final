@@ -10,14 +10,6 @@
 </source>
 
 <source>
- type tail
- path /var/log/foo/auth.log
- pos_file /var/log/auth.pos
- tag authlog
- format /^(?<time>[^ ]* {1,2}[^ ]* [^ ]*) (?<host>[^ ]*) (?<ident>[a-zA-Z0-9_\/\.\-]*)(?:\[(?<pid>[0-9]+)\])?(?:[^\:]*\:)? *(?<message>.*)$/
-</source>
-
-<source>
   type tail
   path /var/log/nginx/access.log
   pos_file /var/log/td-agent/nginx-access.pos
@@ -33,34 +25,26 @@
 ## Match descriptions:
 ##
 
-<match authlog.**>
- @type elasticsearch
- logstash_format true
- logstash_prefix "server-authlogs"
- include_tag_key true
- flush_interval 5s
- logstash_dateformat %Y.%m.%d
- time_precision 3
- {% for host in groups['log'] %}
- host {{ hostvars[host]['ansible_facts']['eth0']['ipv4']['address'] }}
- {% endfor %}
-
-</match>
-
 <match syslog.**>
   @type elasticsearch
   {% for host in groups['log'] %}
   host {{ hostvars[host]['ansible_facts']['eth0']['ipv4']['address'] }}
   {% endfor %}
   logstash_format true
-  logstash_prefix "server-syslogs"
+  logstash_prefix "logs"
+  include_tag_key true
+  type_name syslog
+  tag_key @log_name
   flush_interval 10s
 </match>
 
 <match nginxlog.**>
   @type elasticsearch
   logstash_format true
-  logstash_prefix "nginxlogs"
+  logstash_prefix "logs"
+  include_tag_key true
+  type_name access_log
+  tag_key @log_name
   {% for host in groups['log'] %}
   host {{ hostvars[host]['ansible_facts']['eth0']['ipv4']['address'] }}
   {% endfor %}

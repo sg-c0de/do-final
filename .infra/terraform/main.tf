@@ -2,21 +2,39 @@ terraform {
   required_providers {
     yandex = {
       source  = "yandex-cloud/yandex"
-      version = "0.61.0"
+      version = "~>0.61.0"
     }
   }
 }
 
-resource "local_file" "ans_inv" {
-  content = templatefile("${path.module}/templates/inv.tpl",
-    {
-#      aws_names = aws_route53_record.vps.*.name
-      #vps_names = values(var.devs)
-      app_ip = yandex_compute_instance.app.*.network_interface.0.nat_ip_address
-      log_ip = yandex_compute_instance.log.*.network_interface.0.nat_ip_address
-      prom_ip = yandex_compute_instance.prom.*.network_interface.0.nat_ip_address
-    }
-  )
+provider "yandex" {
+  service_account_key_file = var.yc_service_accout_key
+  cloud_id                 = var.yc_cloud_id
+  folder_id                = var.yc_folder_id
+  zone                     = "ru-central1-a"
+}
+
+module "yandex_compute" {
+  source = "./modules/yandex_compute"
+
+  for_each = var.instances
+
+  instance_count          = each.value.instance_count
+  instance_cores          = each.value.instance_cores
+  instance_memory         = each.value.instance_memory
+  instance_disk_size      = each.value.instance_disk_size
+
+  instance_type     = each.key
+}
+
+resource "local_file" "inventory" {
+  content = templatefile(
+    "${path.module}/templates/inventory.tftpl", {
+      app_ips = flatten(module.yandex_compute.*.app.external_ip)
+      lb_ips = flatten(module.yandex_compute.*.lb.external_ip)
+      log_ips = flatten(module.yandex_compute.*.log.external_ip)
+      prom_ips = flatten(module.yandex_compute.*.prom.external_ip)
+  })
   filename = "${path.module}/../inventory/dev"
 }
 

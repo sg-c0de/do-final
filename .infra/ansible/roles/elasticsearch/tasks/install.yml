@@ -19,5 +19,5 @@
   lineinfile:
     path: /usr/lib/systemd/system/elasticsearch.service
     regexp: '^TimeoutStartSec='
-    line: TimeoutStartSec=300
+    line: TimeoutStartSec=500
   notify: start elasticsearch

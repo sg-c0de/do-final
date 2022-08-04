@@ -24,82 +24,35 @@ variable "prefix" {
   default     = "sg-soap-at-gmail-com"
 }
 
-# App vps config section
-
-variable "app_vps_count" {
-  description = "Number of app instances to provision."
-  type        = number
-  default     = 1
-}
-
-variable "app_vps_cores" {
-  description = "Cores number of app instances."
-  type        = number
-  default     = 2
-}
-
-variable "app_vps_memory" {
-  description = "Memory size of app instances."
-  type        = number
-  default     = 2
-}
-
-variable "app_vps_disk_size" {
-  description = "Disk size of app instances."
-  type        = number
-  default     = 10
-}
-
-# Log vps config section
-
-variable "log_vps_count" {
-  description = "Number of app instances to provision."
-  type        = number
-  default     = 0
-}
-
-variable "log_vps_cores" {
-  description = "Cores number of app instances."
-  type        = number
-  default     = 2
-}
-
-variable "log_vps_memory" {
-  description = "Memory size of app instances."
-  type        = number
-  default     = 2
-}
-
-variable "log_vps_disk_size" {
-  description = "Disk size of app instances."
-  type        = number
-  default     = 6
-}
-
-# Prom vps config section
-
-variable "prom_vps_count" {
-  description = "Number of app instances to provision."
-  type        = number
-  default     = 0
-}
-
-variable "prom_vps_cores" {
-  description = "Cores number of app instances."
-  type        = number
-  default     = 2
-}
-
-variable "prom_vps_memory" {
-  description = "Memory size of app instances."
-  type        = number
-  default     = 1
-}
-
-variable "prom_vps_disk_size" {
-  description = "Disk size of app instances."
-  type        = number
-  default     = 6
+variable "instances" {
+  description = "Map of instance types to configuration."
+  type        = map
+  default     = {
+    app = {
+      instance_count = 1,
+      instance_cores = 2,
+      instance_memory = 2,
+      instance_disk_size = 10
+    },
+    lb = {
+      instance_count = 1,
+      instance_cores = 2,
+      instance_memory = 2,
+      instance_disk_size = 6
+    },
+    log = {
+      instance_count = 1,
+      instance_cores = 2,
+      instance_memory = 3,
+      instance_disk_size = 6
+    },
+    prom = {
+      instance_count = 1,
+      instance_cores = 2,
+      instance_memory = 2,
+      instance_disk_size = 6
+    },
+  }
 }
 
 variable "yc_service_accout_key" {
