@@ -1,3 +1,6 @@
 ---
 deploy_user: cicd
 gitlab_runner_registration_token: []
+app_name: gitea
+app_build_dir: "/usr/local/src/{{ app_name }}"
+gitlab_runner_url: https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-linux-amd64

@@ -1,24 +1,16 @@
 ---
 
+- name: Get gitlab-runner binary
+  get_url:
+    url: '{{ gitlab_runner_url }}'
+    dest: '/usr/local/bin/gitlab-runner'
+    mode: a+x
+
 - name: Install gitlab-runner
-  apt:
-    allow_unauthenticated: yes
-    name: gitlab-runner
-    state: present
-    update_cache: yes
-  notify: start gitlab-runner
+  command: 'gitlab-runner install --user={{ deploy_user }} --working-directory={{ app_build_dir }}'
 
-- name: Add deploy user to gitlab group
-  user:
-    name: '{{ deploy_user }}'
-    groups: gitlab-runner
-    append: yes
-
-- name: Modify service file
-  template:
-    src: gitlab-runner.service.j2
-    dest: "/lib/systemd/system/gitlab-runner.service"
-  notify: restart gitlab-runner
+- name: Start gitlab-runner service
+  command: 'gitlab-runner start'
 
 - name: Register runner to GitLab
   command: 'gitlab-runner register --url https://gitlab.rebrainme.com/ --registration-token {{ gitlab_runner_registration_token }} --tag-list "deploy" --executor "shell" --non-interactive'
