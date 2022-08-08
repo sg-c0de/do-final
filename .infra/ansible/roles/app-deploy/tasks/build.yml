@@ -1,4 +1,10 @@
 ---
+- name: Create build dir
+  ansible.builtin.file:
+    path: "{{ app_build_dir }}"
+    state: directory
+  remote_user: "{{ deploy_user }}"
+
 - name: Git checkout
   ansible.builtin.git:
     repo: "{{ app_repo }}"

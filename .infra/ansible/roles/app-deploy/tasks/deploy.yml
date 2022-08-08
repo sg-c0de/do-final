@@ -27,3 +27,11 @@
     GITEA_WORK_DIR: "{{ app_work_dir }}"
   remote_user: "{{ app_user }}"
   when: db_created.changed
+
+# Cleanup
+
+- name: Remove build dir
+  ansible.builtin.file:
+    path: "{{ app_build_dir }}"
+    state: absent
+  remote_user: "{{ deploy_user }}"

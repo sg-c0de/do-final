@@ -29,7 +29,7 @@
   community.general.git_config:
     name: safe.directory
     scope: global
-    value: "{{ app_build_dir }}"
+    value: "{{ app_src_dir }}"
 
 - name: Create config file
   template:

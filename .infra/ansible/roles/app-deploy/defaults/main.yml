@@ -17,7 +17,8 @@ app_log_dir: "/var/log/{{ app_name }}"
 app_work_dir: "/var/lib/{{ app_name }}"
 app_deploy_dir: "/opt/{{ app_name }}"
 app_version_dir: "/opt/{{ app_name }}/versions"
-app_build_dir: "/usr/local/src/{{ app_name }}"
+app_src_dir: "/usr/local/src/{{ app_name }}"
+app_build_dir: "/usr/local/src/{{ app_name }}/builds/{{ app_version }}"
 app_dirs:
   - "{{ app_conf_dir }}"
   - "{{ app_log_dir }}"
@@ -25,4 +26,4 @@ app_dirs:
 deploy_dirs:
   - "{{ app_deploy_dir }}"
   - "{{ app_version_dir }}"
-  - "{{ app_build_dir }}"
+  - "{{ app_src_dir }}"
