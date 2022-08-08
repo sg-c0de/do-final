@@ -3,3 +3,6 @@ available_sites_path: /etc/nginx/sites-available
 host_filename:
   - http-redirect
   - https
+hostnames:
+  - '{{ inventory_hostname }}'
+  - 'grafana.{{ inventory_hostname }}'

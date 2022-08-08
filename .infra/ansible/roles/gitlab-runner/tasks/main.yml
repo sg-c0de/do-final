@@ -8,10 +8,16 @@
     update_cache: yes
   notify: start gitlab-runner
 
+- name: Add deploy user to gitlab group
+  user:
+    name: '{{ deploy_user }}'
+    groups: gitlab-runner
+    append: yes
+
 - name: Modify service file
-  copy:
-    src: gitlab-ci-multi-runner.service
-    dest: "/etc/systemd/system/gitlab-ci-multi-runner.service"
+  template:
+    src: gitlab-runner.service.j2
+    dest: "/lib/systemd/system/gitlab-runner.service"
   notify: restart gitlab-runner
 
 - name: Register runner to GitLab

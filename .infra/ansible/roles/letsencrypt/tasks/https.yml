@@ -11,9 +11,11 @@
     state: directory
 
 - name: Receive SSL cert
-  shell: /usr/bin/letsencrypt certonly -n --webroot -w /opt/acme --agree-tos -d {{ inventory_hostname }} -m sg.soap@gmail.com
+  shell: /usr/bin/letsencrypt certonly -n --webroot -w /opt/acme --agree-tos -d {{ item }} -m sg.soap@gmail.com
   args:
-    creates: /etc/letsencrypt/live/{{ inventory_hostname }}
+    creates: /etc/letsencrypt/live/{{ item }}
+  loop: '{{ hostnames }}'
+
 
 - name: Remove http site config
   file:

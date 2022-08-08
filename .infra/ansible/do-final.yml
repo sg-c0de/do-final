@@ -20,7 +20,7 @@
     - role: nginxlog-exporter
     - role: nginx-lb
       vars:
-        host_filename: https
+#        host_filename: http
 
 - hosts: app
   become: yes

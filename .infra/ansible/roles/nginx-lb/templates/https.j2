@@ -38,10 +38,10 @@ server {
 	server {
 		listen 443 ssl;
 
-		ssl_certificate /etc/letsencrypt/live/{{ inventory_hostname }}/fullchain.pem;
-		ssl_certificate_key /etc/letsencrypt/live/{{ inventory_hostname }}/privkey.pem;
+		ssl_certificate /etc/letsencrypt/live/grafana.{{ inventory_hostname }}/fullchain.pem;
+		ssl_certificate_key /etc/letsencrypt/live/grafana.{{ inventory_hostname }}/privkey.pem;
 
-		server_name grafana-{{ inventory_hostname }};
+		server_name grafana.{{ inventory_hostname }};
 
 		location / {
 			proxy_set_header    X-Real-IP       $remote_addr;
