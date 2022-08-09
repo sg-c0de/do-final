@@ -17,7 +17,7 @@ go-lint:
   stage: linting
   script:
     - cd $CI_PROJECT_DIR
-    - golangci-lint run --disable-all -E errcheck 
+    - golangci-lint run --disable-all -E errcheck main.go
   only:
       refs:
        - master
