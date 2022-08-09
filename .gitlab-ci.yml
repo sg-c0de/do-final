@@ -4,7 +4,6 @@ variables:
   VERSION: $CI_COMMIT_SHORT_SHA
 
 before_script:
-  - cd $CI_PROJECT_DIR
   - curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin
 
 stages:
@@ -17,7 +16,8 @@ go-lint:
     - deploy
   stage: linting
   script:
-    - golangci-lint run  
+    - cd $CI_PROJECT_DIR
+    - golangci-lint run --disable-all -E errcheck 
   only:
       refs:
        - master
