@@ -17,7 +17,7 @@ go-lint:
   stage: linting
   script:
     - cd $CI_PROJECT_DIR
-    - golangci-lint run --disable-all -E errcheck main.go
+    - golangci-lint run main.go
   only:
       refs:
        - master
@@ -44,7 +44,7 @@ deployapp:
   script:
     - mkdir -p /opt/$APP/versions/$VERSION
     - cp $CI_PROJECT_DIR/$APP /opt/$APP/versions/$VERSION
-    - ln -s /opt/$APP/versions/$VERSION /opt/$APP/$APP 
+    - ln -sf /opt/$APP/versions/$VERSION/$APP /opt/$APP/$APP 
   only:
       refs:
        - master
