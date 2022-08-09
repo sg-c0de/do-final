@@ -1,12 +1,11 @@
 variables:
   REPO_NAME: gitlab.rebrainme.com/devops_users_repos/2735/do-final
-  PACKAGE: gitea
-  VERSION: $PACKAGE_VERSION-$CI_COMMIT_SHORT_SHA
+  APP: gitea
+  VERSION: $CI_COMMIT_SHORT_SHA
 
 before_script:
-  - mkdir -p $GOPATH/src/$(dirname $REPO_NAME)
-  - ln -svf $CI_PROJECT_DIR $GOPATH/src/$REPO_NAME
-  - cd $GOPATH/src/$REPO_NAME
+  - cd $CI_PROJECT_DIR
+  - curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin
 
 stages:
   - linting
@@ -18,9 +17,7 @@ go-lint:
     - deploy
   stage: linting
   script:
-    - go mod init  
-    - go install golint
-    - golint ./...
+    - golangci-lint run  
   only:
       refs:
        - master
@@ -34,7 +31,7 @@ compile:
     - TAGS="bindata" make build
   artifacts:
     paths:
-      - $CI_PROJECT_DIR/$PACKAGE
+      - $CI_PROJECT_DIR/$APP
   only:
       refs:
        - master
@@ -45,9 +42,9 @@ deployapp:
     - deploy
   stage: deploy
   script:
-    - mkdir -p /opt/gitea/versions/$VERSION
-    - cp $CI_PROJECT_DIR/$PACKAGE /opt/gitea/versions/$VERSION
-    - ln -s /opt/gitea/versions/$VERSION /opt/gitea/$PACKAGE 
+    - mkdir -p /opt/$APP/versions/$VERSION
+    - cp $CI_PROJECT_DIR/$APP /opt/$APP/versions/$VERSION
+    - ln -s /opt/$APP/versions/$VERSION /opt/$APP/$APP 
   only:
       refs:
        - master
