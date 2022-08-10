@@ -38,13 +38,19 @@ resource "local_file" "inventory" {
   filename = "${path.module}/../inventory/dev"
 }
 
-/*
+resource "time_sleep" "wait_for_vms_ready" {
+  create_duration = "2m"
+  depends_on = [
+    local_file.inventory,
+  ]
+}
+
 resource "null_resource" "AnsiblePlaybook" {
   provisioner "local-exec" {
     command = "ansible-playbook -i '${path.module}/../inventory/dev' '${path.module}/../ansible/do-final.yml' --vault-password-file ~/.keys/vault_password"
   }
   depends_on = [
-    local_file.ans_inv
+    local_file.inventory,
+    time_sleep.wait_for_vms_ready
   ]
 }
-*/
