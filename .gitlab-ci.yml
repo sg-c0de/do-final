@@ -21,7 +21,7 @@ go-lint:
   only:
       refs:
        - master
-  
+
 
 compile:
   tags:
@@ -44,7 +44,8 @@ deployapp:
   script:
     - mkdir -p /opt/$APP/versions/$VERSION
     - cp $CI_PROJECT_DIR/$APP /opt/$APP/versions/$VERSION
-    - ln -sf /opt/$APP/versions/$VERSION/$APP /opt/$APP/$APP 
+    - ln -sf /opt/$APP/versions/$VERSION/$APP /opt/$APP/$APP
+    - sudo systemctl restart $APP.service
   only:
       refs:
        - master
