@@ -1,5 +1,11 @@
 ---
 
+- name: Allow localhost traffic
+  ansible.builtin.iptables:
+    chain: INPUT
+    source: 127.0.0.1
+    jump: ACCEPT
+
 - name: Allow all connections on multiple ports
   ansible.builtin.iptables:
     chain: INPUT
@@ -13,6 +19,7 @@
 - name: Allow local dns resolution
   ansible.builtin.iptables:
     chain: INPUT
+    source: 10.0.0.0/8
     protocol: udp
     destination_ports: 53
     jump: ACCEPT

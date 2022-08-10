@@ -3,10 +3,10 @@
 - hosts: all
   become: yes
   roles:
+    - role: iptables
     - role: admin-users
     - role: node-exporter
     - role: fluentd
-#    - role: iptables
   remote_user: ubuntu
   vars_files:
     - vaults/vault.yml
